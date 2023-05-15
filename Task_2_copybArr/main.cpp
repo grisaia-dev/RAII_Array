@@ -4,6 +4,7 @@ class smart_array {
 private:
     int* p_arr = nullptr;
     unsigned int size = 0;
+    unsigned int count = 0;
 public:
     smart_array(const int &size_array) {
         this->size = size_array;
@@ -12,18 +13,14 @@ public:
     }
 
     void add_element(const int &var) {
-        for (unsigned int i=0; i < get_array_size(); i++) {
-            if (p_arr[i] == 0) {
-                p_arr[i] = var;
-                break;
-            }
-            if (i >= size-1)
-                throw std::string{"Cannot add more element to array because array is full!!!"};
-        }
+        if (this->count > this->size-1)
+            throw std::string{"Can't add more elements in array because array is full!!!"};
+        p_arr[this->count] = var;
+        this->count += 1;
     }
 
     int get_element(const int &index) {
-        if (index > size-1)
+        if (index > this->size-1)
             throw std::string{"Index greater than size array!!!"};
         return p_arr[index];
     }
@@ -45,7 +42,7 @@ public:
     }
 
     ~smart_array() {
-        delete [] p_arr;
+        delete [] this->p_arr;
         std::cout << "Array deleted!" << std::endl;
     }
 };
@@ -55,7 +52,7 @@ int main(void) {
         smart_array arr(5);
         arr.add_element(43);
         arr.add_element(15);
-        arr.add_element(60);
+        arr.add_element(0);
         arr.add_element(23);
         arr.add_element(1);
         std::cout << "arr: ";
@@ -63,8 +60,9 @@ int main(void) {
             std::cout << arr.get_element(i) << " ";
         std::cout << std::endl << std::endl;
 
-        smart_array new_array(2);
+        smart_array new_array(3);
         new_array.add_element(2);
+        new_array.add_element(0);
         new_array.add_element(1);
         std::cout << "new_array: ";
         for (unsigned int i=0; i < new_array.get_array_size(); i++)
